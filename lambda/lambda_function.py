@@ -27,13 +27,11 @@ dbuser=environ.get('DBUSER')
 password=environ.get('DBPASSWORD')
 database=environ.get('DATABASE')
 
-query_db_list = [
+query_list = [
     "CREATE DATABASE QSR ENCODING = 'UTF8'",
     "CREATE DATABASE SenseServices ENCODING = 'UTF8'",
     "CREATE DATABASE QSMQ ENCODING = 'UTF8'",
-    "CREATE DATABASE Licenses ENCODING = 'UTF8'"
-    ]
-query_after_db_list = [
+    "CREATE DATABASE Licenses ENCODING = 'UTF8'",
     "CREATE ROLE qliksenserepository WITH LOGIN NOINHERIT NOSUPERUSER NOCREATEDB NOCREATEROLE NOREPLICATION VALID UNTIL 'infinity'",
     "ALTER ROLE qliksenserepository WITH ENCRYPTED PASSWORD 'qliksense'",
     "ALTER DATABASE QSR OWNER TO qliksenserepository",
@@ -75,13 +73,7 @@ def lambda_handler(event,context):
         cursor=cnx.cursor()
 
         try:
-            for query in query_db_list:
-                cursor.execute(query)
-        except:
-            return log_err ("ERROR: Cannot execute cursor.\n{}".format(
-                traceback.format_exc()) )
-        try:
-            for query in query_after_db_list:
+            for query in query_list:
                 cursor.execute(query)
         except:
             return log_err ("ERROR: Cannot execute cursor.\n{}".format(
